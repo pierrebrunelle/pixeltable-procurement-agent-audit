@@ -1,0 +1,24 @@
+cff-version: 1.2.0
+message: "If you use or adapt this example app, please cite it using these metadata."
+type: software
+title: "Procurement Approval Agent audit trail built with Pixeltable"
+abstract: "Procurement approval agent whose every decision is versioned: read the agent's verdicts as of any table version, see why one request was decided the way it was across policy changes, roll back a bad policy rollout with revert() and freeze a quarter-close snapshot."
+authors:
+  - given-names: "Pierre"
+    family-names: "Brunelle"
+repository-code: "https://github.com/pierrebrunelle/pixeltable-procurement-agent-audit"
+url: "https://pierrebrunelle.github.io/awesome-pixeltable-apps/"
+license: Apache-2.0
+version: "0.1.0"
+date-released: 2026-10-25
+keywords:
+  - "pixeltable"
+  - "pixeltable-example"
+  - "python"
+  - "data-versioning"
+  - "audit-trail"
+  - "time-travel"
+  - "ai-agents"
+  - "procurement"
+  - "llm"
+  - "udf"

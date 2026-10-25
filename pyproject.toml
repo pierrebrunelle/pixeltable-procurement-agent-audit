@@ -1,0 +1,18 @@
+[project]
+name = "pixeltable-procurement-agent-audit"
+version = "0.1.0"
+description = "Procurement approval agent whose every decision is versioned: read the agent's verdicts as of any table version, see why one request was decided the way it was across policy changes, roll back a bad policy rollout with revert() and freeze a quarter-close snapshot - built with Pixeltable"
+readme = "README.md"
+requires-python = ">=3.11"
+license = "Apache-2.0"
+authors = [{ name = "Pierre Brunelle" }]
+keywords = ["pixeltable", "multimodal", "ai", "computed-columns", "data-infrastructure", "procurement-agent-audit"]
+dependencies = [
+    "pixeltable>=0.7.20",
+    "openai>=1.0",
+]
+
+[project.urls]
+Homepage = "https://pixeltable.com"
+Documentation = "https://docs.pixeltable.com"
+Pixeltable = "https://github.com/pixeltable/pixeltable"
