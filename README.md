@@ -47,7 +47,7 @@
 - A policy change is one `update` on `policy_version`; Pixeltable recomputes the prompt, the model call and every dependent column for the updated rows only, and records it as one version.
 - The guardrail is plain Python and runs after the model: the agent can never approve a request at or above the CFO limit or from an unapproved vendor, whatever the prompt says.
 - The update count in `history()` for `requests` includes rows propagated to its views (here `escalations`), so it can exceed the number of rows in the table.
-- Keep snapshots outside the schema directory (`procure_snapshots/`, not `procure/`): `pxt schema prune app.py procure` drops tables under `procure/` that `app.py` does not define.
+- Keep snapshots outside the schema directory (`procure_snapshots/`, not `procure/`): `pxt schema prune app.py procure` drops tables under `procure/` that `app.py` does not define. On Pixeltable Cloud the tables sit at the database root, so `audit.py --target pxt://<your-org>:<your-db>` puts snapshots in `snapshots/` there; `pxt schema prune` on that database would drop them too.
 
 ## What's inside
 
@@ -131,7 +131,7 @@ The same `app.py` runs on [Pixeltable Cloud](https://pixeltable.com). Sign in (o
 pxt login                       # or: export PIXELTABLE_API_KEY=<your-api-key>
 # edit pixeltable.toml: name = 'pxt://<your-org>:<your-db>'
 pxt db update pxt://<your-org>:<your-db>                 # build the image and upload the project
-pxt schema update app.py pxt://<your-org>:<your-db>/procure   # create the tables in the hosted database
+pxt schema update app.py pxt://<your-org>:<your-db>       # create the tables at the database root (no per-app folder)
 ```
 
 Keep keys in environment variables or `pxt secret set`, never in code.
@@ -233,7 +233,7 @@ They keep their own schema. After `pxt schema update` dropped the `notes` column
 
 **Can I run the same audit on Pixeltable Cloud?**
 
-Yes: `pxt db update pxt://<your-org>:<your-db>`, set `OPENAI_API_KEY` as a database secret (`pxt secret set` then `pxt db restart`), run `pxt schema update app.py pxt://<your-org>:<your-db>/procure`, and pass `--target pxt://<your-org>:<your-db>/procure` to every `audit.py` command.
+Yes: `pxt db update pxt://<your-org>:<your-db>`, set `OPENAI_API_KEY` as a database secret (`pxt secret set` then `pxt db restart`), run `pxt schema update app.py pxt://<your-org>:<your-db>`, and pass `--target pxt://<your-org>:<your-db>` to every `audit.py` command.
 
 ## Learn more
 

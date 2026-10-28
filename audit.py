@@ -12,7 +12,7 @@
     python audit.py snapshot q4-close          # named read-only copy under procure_snapshots/
     python audit.py escalations                # the Escalations view: what a human must review now
 
-Every command takes --target (default 'procure'); use pxt://<org>:<db>/procure for a cloud database.
+Every command takes --target (default 'procure'); use pxt://<org>:<db> for a cloud database.
 """
 
 from __future__ import annotations
@@ -176,10 +176,19 @@ def cmd_diff(a) -> None:
     print(f'{changed} decisions changed between v{a.a} and v{a.b}')
 
 
+def sibling_dir(target: str, suffix: str) -> str:
+    """`name` -> `name_<suffix>` next to the schema dir; a cloud database root `pxt://<org>:<db>` -> `pxt://<org>:<db>/<suffix>`."""
+    _, sep, rest = target.partition('://')
+    if sep and '/' not in rest:  # a cloud database root: the tables sit there, so use a subdirectory
+        return f'{target}/{suffix}'
+    return f'{target}_{suffix}'
+
+
 def cmd_snapshot(a) -> None:
-    pxt.create_dir(f'{a.target}_snapshots', if_exists='ignore')
-    snap = pxt.create_snapshot(f'{a.target}_snapshots/{a.name}', requests(a.target), if_exists='ignore')
-    print(f'snapshot {a.target}_snapshots/{a.name}: {snap.count()} rows')
+    snaps = sibling_dir(a.target, 'snapshots')
+    pxt.create_dir(snaps, if_exists='ignore')
+    snap = pxt.create_snapshot(f'{snaps}/{a.name}', requests(a.target), if_exists='ignore')
+    print(f'snapshot {snaps}/{a.name}: {snap.count()} rows')
 
 
 def cmd_escalations(a) -> None:
@@ -191,7 +200,7 @@ def cmd_escalations(a) -> None:
 
 def main() -> None:
     p = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    p.add_argument('--target', default='procure', help="catalog dir, or pxt://<org>:<db>/procure")
+    p.add_argument('--target', default='procure', help="catalog dir, or pxt://<org>:<db>")
     sub = p.add_subparsers(dest='cmd', required=True)
     sub.add_parser('seed')
     s = sub.add_parser('submit')
